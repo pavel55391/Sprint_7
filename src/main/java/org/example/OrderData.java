@@ -12,13 +12,13 @@ public class OrderData {
     private int rentTime;
     private String deliveryDate;
     private String comment;
-    private List<String> color;
+    private List<Color> color;
 
     public OrderData() {
 
     }
 
-    public OrderData(String firstName, String lastName, String address, String metroStation, String phone, int rentTime, String deliveryDate, String comment, List<String> color) {
+    public OrderData(String firstName, String lastName, String address, String metroStation, String phone, int rentTime, String deliveryDate, String comment, List<Color> color) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -64,7 +64,7 @@ public class OrderData {
         this.comment = comment;
     }
 
-    public void setColor(List<String> color) {
+    public void setColor(List<Color> color) {
         this.color = color;
     }
 
@@ -102,10 +102,12 @@ public class OrderData {
         return comment;
     }
 
-    public List<String> getColor() {
+    public List<Color> getColor() {
         return color;
     }
 
-
-
+    public enum Color {
+        BLACK,
+        GREY
+    }
 }

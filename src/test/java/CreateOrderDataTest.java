@@ -3,9 +3,8 @@ import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import org.example.Courier;
 import org.example.OrderData;
+import org.example.OrderData.Color;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.extension.ParameterResolver;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -15,6 +14,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
+import static org.example.OrderData.Color.BLACK;
+import static org.example.OrderData.Color.GREY;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,9 +31,9 @@ public class CreateOrderDataTest {
         order = new OrderData();
         order.setFirstName("Naruto");
         order.setLastName("Uchiha");
-        order.setAddress("Konoha, 142 apt.");
+        order.setAddress("Konoha, 106 apt.");
         order.setMetroStation("4");
-        order.setPhone("+7 800 355 35 35");
+        order.setPhone("+7 800 555 35 35");
         order.setRentTime(5);
         order.setDeliveryDate("2020-06-06");
         order.setComment("Saske, come back to Konoha");
@@ -40,24 +41,12 @@ public class CreateOrderDataTest {
 
     }
 
-
-
-    String json = "{\"firstName\": \"Naruto\",\n" +
-            "            \"lastName\": \"Uchiha\",\n" +
-            "            \"address\": \"Konoha, 142 apt.\",\n" +
-            "            \"metroStation\": 4,\n" +
-            "            \"phone\": \"+7 800 355 35 35\",\n" +
-            "            \"rentTime\": 5,\n" +
-            "            \"deliveryDate\": \"2020-06-06\",\n" +
-            "            \"comment\": \"Saske, come back to Konoha\"}";
-
     static Object[][] colorData(){
         return new Object[][]{
-                {List.of("GREY"), true},
-                {List.of("BLACK"), true},
-                {List.of("GREY", "BLACK"), true},
-                {List.of(), true},
-                {List.of("RED"), false}
+                {List.of(GREY)},
+                {List.of(BLACK)},
+                {List.of(GREY, BLACK)},
+                {List.of()}
         };
     }
 
@@ -77,9 +66,10 @@ public class CreateOrderDataTest {
 //    }
 
     @Order(1)
-   @ParameterizedTest
-   @MethodSource("colorData")
-    public void canSelectColorBlack(List<String> colors, boolean expected) {
+    @ParameterizedTest
+    @MethodSource("colorData")
+    public void canSelectColorBlack(List<Color> colors) {
+        order.setColor(colors);
         Response response =
                 given()
                         .header("Content-type", "application/json")
@@ -88,15 +78,6 @@ public class CreateOrderDataTest {
                         .when()
                         .post("/api/v1/orders");
 
-        //response.then().assertThat().statusCode(409);
-        List<String> allowedColors = List.of("GREY", "BLACK");
-        boolean actual = true;
-        for (String color : colors) {
-            if (!allowedColors.contains(color)) {
-                actual = false;
-                break;
-            }
-        }
         response.then().assertThat().statusCode(201).and().body("track" , notNullValue());
     }
 }
