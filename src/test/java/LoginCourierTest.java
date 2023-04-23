@@ -3,10 +3,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.example.Courier;
 import org.junit.jupiter.api.*;
-
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -15,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LoginCourierTest {
 
-    //private Object Response;
+
     private static String correctLogin = "\"login\": \"hashirama\"";
     private static String correctPassword = "\"password\": \"1488_228\"";
     private static String correctFirstName = "\"firstName\": \"madara\"";
@@ -34,6 +31,7 @@ public class LoginCourierTest {
 
     @Test
     @Order(1)
+    @DisplayName("Check login courier")
     public void loginCourier(){
 
         String json = "{\"login\": \"hashirama\",\n" +
@@ -51,6 +49,7 @@ public class LoginCourierTest {
 
     @Test
     @Order(2)
+    @DisplayName("Check login courier with required fields")
     public void passRequiredFieldsForAuthorization(){
         Gson gson = new Gson();
         String json = String.format("{%s, %s}", correctLogin, correctPassword);
@@ -63,6 +62,7 @@ public class LoginCourierTest {
 
     @Test
     @Order(3)
+    @DisplayName("Check login courier with incorrect password")
     public void systemReturnErrorIfPasswordIncorrect() {
         String json = "{  \"login\": \"hashirama\",\n" +
                 "    \"password\": \"tobirama\"}";
@@ -78,6 +78,7 @@ public class LoginCourierTest {
 
     @Test
     @Order(4)
+    @DisplayName("Check login courier without one field")
     public void recuestWithoutOneField(){
         assertTimeoutPreemptively(Duration.ofMillis(100), () -> {
             while (true);
@@ -95,7 +96,8 @@ public class LoginCourierTest {
 
     @Test
     @Order(5)
-    public void logInUnderNonExistUser(){ // +
+    @DisplayName("Check login courier with non exist credential")
+    public void logInUnderNonExistUser(){
         String json = "{  \"login\": \"test\",\n" +
                 "    \"password\": \"test\"}";
         Response response =
@@ -110,7 +112,8 @@ public class LoginCourierTest {
 
     @Test
     @Order(6)
-    public void successfulRequestReturnsId(){ //+
+    @DisplayName("Check successful ID request")
+    public void successfulRequestReturnsId(){
         String json = "{  \"login\": \"hashirama\",\n" +
                 "    \"password\": \"1488_228\"}";
         Response response =

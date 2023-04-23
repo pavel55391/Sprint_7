@@ -4,9 +4,7 @@ import org.example.Courier;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import org.junit.jupiter.api.*;
-
 import java.util.Random;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -27,8 +25,8 @@ public class CreatingCourierTest {
 
     @Test
     @Order(1)
-    //@Description()
-    public void createCourier(){ //+
+    @DisplayName("Check creating courier / status code / body")
+    public void createCourierReturnsCorrectCodeAndBody(){
         Response response =
                 given()
                 .header("Content-type", "application/json")
@@ -43,7 +41,8 @@ public class CreatingCourierTest {
 
     @Test
     @Order(2)
-    public void createCourierDuplicate() { //+
+    @DisplayName("Creating two identical couriers")
+    public void createCourierDuplicate() {
         Response response =
                 given()
                         .header("Content-type", "application/json")
@@ -57,6 +56,7 @@ public class CreatingCourierTest {
 
     @Test
     @Order(3)
+    @DisplayName("Checking required fields when creating courier")
     public void createCourierWithRequiredFields(){
         boolean hasEmptyFields = Utils.isEmptyString(courier.getLogin())
                 || Utils.isEmptyString(courier.getPassword())
@@ -66,34 +66,7 @@ public class CreatingCourierTest {
 
     @Test
     @Order(4)
-    public void requestReturnsCorrectResponseCode(){
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(courier)
-                        .when()
-                        .post("/api/v1/courier");
-        response.then().statusCode(201);
-    }
-
-    @Test
-    @Order(5)
-    public void successRequestReturnsTrue(){ //+
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(courier)
-                        .when()
-                        .post("/api/v1/courier");
-        var t = response.body().print();
-        //response.then().assertThat().body(containsString("{\"ok\":true}"), is("{\"ok\":true}"));
-        response.then().assertThat().body("ok", is(true));
-    }
-
-    @Test
-    @Order(6)
+    @DisplayName("Check creating courier without required field")
     public void requestWithoutOneField(){  //+
         String json = "{ \"login\": \"ninja\",\n" +
                 "\"password\": \"1234\"\n}";
@@ -109,7 +82,8 @@ public class CreatingCourierTest {
     }
 
     @Test
-    @Order(7)
+    @Order(5)
+    @DisplayName("Check creating courier with an existing username")
     public void createUserWithLoginThatAlreadyExistsReturnError(){
         Response response =
                 given()
