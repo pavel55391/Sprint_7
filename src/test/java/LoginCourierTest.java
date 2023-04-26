@@ -3,7 +3,9 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.example.Courier;
 import org.junit.jupiter.api.*;
+
 import java.time.Duration;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -32,25 +34,25 @@ public class LoginCourierTest {
     @Test
     @Order(1)
     @DisplayName("Check login courier")
-    public void loginCourier(){
+    public void loginCourier() {
 
         String json = "{\"login\": \"hashirama\",\n" +
                 "\"password\": \"1488_228\"}";
 
         Response response =
-        given()
-                .header("Content-type", "application/json")
-                .and()
-                .body(json)
-                .when()
-                .post("/api/v1/courier/login");
+                given()
+                        .header("Content-type", "application/json")
+                        .and()
+                        .body(json)
+                        .when()
+                        .post("/api/v1/courier/login");
         response.then().assertThat().statusCode(200);
     }
 
     @Test
     @Order(2)
     @DisplayName("Check login courier with required fields")
-    public void passRequiredFieldsForAuthorization(){
+    public void passRequiredFieldsForAuthorization() {
         Gson gson = new Gson();
         String json = String.format("{%s, %s}", correctLogin, correctPassword);
         Courier courier = gson.fromJson(json, Courier.class);
@@ -79,9 +81,9 @@ public class LoginCourierTest {
     @Test
     @Order(4)
     @DisplayName("Check login courier without one field")
-    public void recuestWithoutOneField(){
+    public void requestWithoutOneField() {
         assertTimeoutPreemptively(Duration.ofMillis(100), () -> {
-            while (true);
+            while (true) ;
         });
         String json = "{  \"login\": \"ninja\"}";
         Response response =
@@ -97,7 +99,7 @@ public class LoginCourierTest {
     @Test
     @Order(5)
     @DisplayName("Check login courier with non exist credential")
-    public void logInUnderNonExistUser(){
+    public void logInUnderNonExistUser() {
         String json = "{  \"login\": \"test\",\n" +
                 "    \"password\": \"test\"}";
         Response response =
@@ -113,7 +115,7 @@ public class LoginCourierTest {
     @Test
     @Order(6)
     @DisplayName("Check successful ID request")
-    public void successfulRequestReturnsId(){
+    public void successfulRequestReturnsId() {
         String json = "{  \"login\": \"hashirama\",\n" +
                 "    \"password\": \"1488_228\"}";
         Response response =
@@ -124,7 +126,6 @@ public class LoginCourierTest {
                         .when()
                         .post("/api/v1/courier/login");
 
-        response.then().assertThat().body("id" , notNullValue());
+        response.then().assertThat().body("id", notNullValue());
     }
-
 }

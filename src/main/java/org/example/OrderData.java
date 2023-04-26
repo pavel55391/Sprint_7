@@ -30,8 +30,6 @@ public class OrderData {
         this.color = color;
     }
 
-
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -67,8 +65,6 @@ public class OrderData {
     public void setColor(List<Color> color) {
         this.color = color;
     }
-
-
 
     public String getFirstName() {
         return firstName;
