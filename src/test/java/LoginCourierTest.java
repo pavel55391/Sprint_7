@@ -82,9 +82,6 @@ public class LoginCourierTest {
     @Order(4)
     @DisplayName("Check login courier without one field")
     public void requestWithoutOneField() {
-        assertTimeoutPreemptively(Duration.ofMillis(100), () -> {
-            while (true) ;
-        });
         String json = "{  \"login\": \"ninja\"}";
         Response response =
                 given()
@@ -128,4 +125,5 @@ public class LoginCourierTest {
 
         response.then().assertThat().body("id", notNullValue());
     }
+
 }
